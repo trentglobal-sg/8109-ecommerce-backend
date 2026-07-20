@@ -2,7 +2,7 @@
 
 Do get started, 
 
-1. `chmod +x db.sh` - allow the `db.sh` script to be runnable
+1. `chmod +x ./db.sh` - allow the `db.sh` script to be runnable
 2. `./db.sh < schema.sql` - setup the database
 3. `./db.sh < data.sql` - insert sample table
 
