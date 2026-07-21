@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 const productRouter = require('./routes/products');
 const userRouter = require('./routes/users');
 const cartRouter = require('./routes/cart');
+const checkoutRouter = require('./routes/checkout');
 
 
 app.get('/health', async function(req,res){
@@ -30,6 +31,7 @@ app.get('/health', async function(req,res){
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/checkout', checkoutRouter);
 
 const PORT = process.env.PORT || 3000;
 
