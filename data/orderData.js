@@ -60,16 +60,37 @@ async function createOrder(userId, orderItems) {
 
 }
 
-async function getOrderDetails(orderId) {
+async function getOrder(orderId) {
+        const sql = `
+        SELECT * FROM orders 
+        WHERE orders.id = ?
+    `;
 
+    const [orders] = await pool.execute(sql, [orderId]);
+    return orders;
+}
+
+async function getOrderDetails(orderId) {
+    const sql = `
+        SELECT * FROM orders JOIN order_items ON orders.id = order_items.order_id
+        WHERE orders.id = ?
+    `;
+
+    const [orders] = pool.execute(sql, [orderId]);
+    return orders;
 }
 
 async function updateOrderStatus(orderId, status) {
-
+    const sql = `UPDATE orders SET status = ? WHERE id = ?`;
+    await pool.execute(sql, [status, orderId]);
 }
 
 async function updateOrderSessionId(orderId, sessionId) {
+    const sql = `UPDATE orders SET checkout_session_id = ?
+            WHERE id = ?
+    `;
 
+    await pool.execute(sql, [sessionId, orderId]);
 }
 
 module.exports = {
@@ -77,5 +98,6 @@ module.exports = {
     getOrderDetails,
     getOrdersByUserId,
     updateOrderSessionId,
-    updateOrderStatus
+    updateOrderStatus,
+    getOrder
 }

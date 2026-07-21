@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 
 // parse json bodies
-app.use(express.json());
+// app.use(express.json());
 
 // parse urlencoded bodies
 app.use(express.urlencoded({ extended: true }));
@@ -19,7 +19,7 @@ const productRouter = require('./routes/products');
 const userRouter = require('./routes/users');
 const cartRouter = require('./routes/cart');
 const checkoutRouter = require('./routes/checkout');
-
+const stripeRouter = require('./routes/stripe');
 
 app.get('/health', async function(req,res){
   res.json({
@@ -28,10 +28,11 @@ app.get('/health', async function(req,res){
 })
 
 // register the router
-app.use('/api/products', productRouter);
-app.use('/api/users', userRouter);
-app.use('/api/cart', cartRouter);
-app.use('/api/checkout', checkoutRouter);
+app.use('/api/products', express.json(), productRouter);
+app.use('/api/users', express.json(), userRouter);
+app.use('/api/cart', express.json(), cartRouter);
+app.use('/api/checkout', express.json(), checkoutRouter);
+app.use('/stripe', stripeRouter);
 
 const PORT = process.env.PORT || 3000;
 
