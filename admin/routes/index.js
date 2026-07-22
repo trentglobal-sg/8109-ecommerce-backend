@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const userServices = require('../../services/userServices');
 const jwt = require('jsonwebtoken');
 const requireAdmin = require('../middlewares/requireAdmin');
+const { askChatbot } = require('../chatbot-agent/agent')
 
 router.get('/', [requireAdmin], (req, res) => {
     res.render('dashboard', {
@@ -58,9 +59,18 @@ router.post('/chat', requireAdmin, express.json(), async (req, res) => {
         return res.status(400).json({ error: 'Message is required' });
     }
 
-    res.json({
-        response: `You said:${message}`
-    });
+    try {
+        const response = await askChatbot(message);
+        res.json({
+            response
+        })
+
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({
+            'error': "Unable to get reply from chatbot"
+        })
+    }
 });
 
 module.exports = router;
